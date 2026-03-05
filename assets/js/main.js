@@ -43,11 +43,67 @@
     if (history.replaceState) {
       history.replaceState(null, '', hash);
     }
+
+    const parentNav = target.closest('.nav');
+    if (parentNav && parentNav.classList.contains('is-open')) {
+      parentNav.classList.remove('is-open');
+      const toggleButton = parentNav.querySelector('.nav-toggle');
+      toggleButton?.setAttribute('aria-expanded', 'false');
+    }
   };
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', onAnchorClick);
   });
+
+  const navElement = document.querySelector('.nav');
+  const navToggle = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+  const mobileNavQuery = window.matchMedia('(max-width: 860px)');
+
+  if (navElement && navToggle && navLinks) {
+    const closeNavMenu = () => {
+      navElement.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    navToggle.addEventListener('click', () => {
+      const isOpen = navElement.classList.contains('is-open');
+      const nextState = !isOpen;
+      navElement.classList.toggle('is-open', nextState);
+      navToggle.setAttribute('aria-expanded', nextState ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!mobileNavQuery.matches || !navElement.classList.contains('is-open')) {
+        return;
+      }
+
+      if (!(event.target instanceof Node)) {
+        return;
+      }
+
+      if (!navElement.contains(event.target)) {
+        closeNavMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && navElement.classList.contains('is-open')) {
+        closeNavMenu();
+      }
+    });
+
+    window.addEventListener(
+      'resize',
+      () => {
+        if (!mobileNavQuery.matches) {
+          closeNavMenu();
+        }
+      },
+      { passive: true }
+    );
+  }
 
   const heroSection = document.getElementById('hero');
   const headlineZone = document.getElementById('hero-headline-zone');
