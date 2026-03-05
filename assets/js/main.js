@@ -61,7 +61,7 @@
   const navElement = document.querySelector('.nav');
   const navToggle = document.getElementById('nav-toggle');
   const navLinks = document.getElementById('nav-links');
-  const mobileNavQuery = window.matchMedia('(max-width: 860px)');
+  const mobileNavQuery = window.matchMedia('(max-width: 1024px)');
 
   if (navElement && navToggle && navLinks) {
     const closeNavMenu = () => {
@@ -106,15 +106,17 @@
       }
     });
 
-    window.addEventListener(
-      'resize',
-      () => {
-        if (!mobileNavQuery.matches) {
-          closeNavMenu();
-        }
-      },
-      { passive: true }
-    );
+    const onMobileNavQueryChange = (event) => {
+      if (!event.matches) {
+        closeNavMenu();
+      }
+    };
+
+    if (typeof mobileNavQuery.addEventListener === 'function') {
+      mobileNavQuery.addEventListener('change', onMobileNavQueryChange);
+    } else if (typeof mobileNavQuery.addListener === 'function') {
+      mobileNavQuery.addListener(onMobileNavQueryChange);
+    }
   }
 
   const heroSection = document.getElementById('hero');
