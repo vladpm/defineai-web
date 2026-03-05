@@ -33,6 +33,7 @@
       this.width = 0;
       this.height = 0;
       this.pixelRatio = 1;
+      this.mobileResizeQuery = window.matchMedia('(max-width: 860px)');
 
       this.onResize = this.onResize.bind(this);
       this.onVisibilityChange = this.onVisibilityChange.bind(this);
@@ -89,8 +90,31 @@
     }
 
     onResize() {
+      const previousWidth = this.width;
+      const previousHeight = this.height;
       this.resize();
-      this.createParticles();
+
+      if (this.particles.length === 0) {
+        this.createParticles();
+        this.drawFrame(16);
+        return;
+      }
+
+      const shouldPreserveParticles =
+        this.mobileResizeQuery.matches && previousWidth > 0 && previousHeight > 0;
+
+      if (shouldPreserveParticles) {
+        const widthScale = this.width / previousWidth;
+        const heightScale = this.height / previousHeight;
+
+        this.particles.forEach((particle) => {
+          particle.x = Math.max(0, Math.min(this.width, particle.x * widthScale));
+          particle.y = Math.max(0, Math.min(this.height, particle.y * heightScale));
+        });
+      } else {
+        this.createParticles();
+      }
+
       this.drawFrame(16);
     }
 

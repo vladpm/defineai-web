@@ -47,6 +47,8 @@
     const parentNav = target.closest('.nav');
     if (parentNav && parentNav.classList.contains('is-open')) {
       parentNav.classList.remove('is-open');
+      root.classList.remove('nav-open');
+      document.body.classList.remove('nav-open');
       const toggleButton = parentNav.querySelector('.nav-toggle');
       toggleButton?.setAttribute('aria-expanded', 'false');
     }
@@ -64,6 +66,8 @@
   if (navElement && navToggle && navLinks) {
     const closeNavMenu = () => {
       navElement.classList.remove('is-open');
+      root.classList.remove('nav-open');
+      document.body.classList.remove('nav-open');
       navToggle.setAttribute('aria-expanded', 'false');
     };
 
@@ -71,7 +75,15 @@
       const isOpen = navElement.classList.contains('is-open');
       const nextState = !isOpen;
       navElement.classList.toggle('is-open', nextState);
+      root.classList.toggle('nav-open', nextState);
+      document.body.classList.toggle('nav-open', nextState);
       navToggle.setAttribute('aria-expanded', nextState ? 'true' : 'false');
+    });
+
+    navLinks.addEventListener('click', (event) => {
+      if (event.target === navLinks) {
+        closeNavMenu();
+      }
     });
 
     document.addEventListener('click', (event) => {
