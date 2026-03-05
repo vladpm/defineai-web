@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://defineai.example/sitemap.xml
+Sitemap: https://defineai.co.uk/sitemap.xml

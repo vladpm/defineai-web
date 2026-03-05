@@ -113,7 +113,14 @@ img {
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(173, 190, 231, 0.16);
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  backdrop-filter: none;
+  transition: background-color 220ms ease, border-color 220ms ease, backdrop-filter 220ms ease;
+}
+
+.site-header.is-scrolled {
+  border-bottom-color: rgba(173, 190, 231, 0.16);
   background: rgba(7, 9, 15, 0.75);
   backdrop-filter: blur(14px);
 }

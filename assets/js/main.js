@@ -21,6 +21,19 @@
     yearNode.textContent = String(new Date().getFullYear());
   }
 
+  const siteHeader = document.querySelector('.site-header');
+  const syncHeaderScrollState = () => {
+    if (!(siteHeader instanceof HTMLElement)) {
+      return;
+    }
+
+    const shouldUseScrolledStyle = window.scrollY > 8;
+    siteHeader.classList.toggle('is-scrolled', shouldUseScrolledStyle);
+  };
+
+  syncHeaderScrollState();
+  window.addEventListener('scroll', syncHeaderScrollState, { passive: true });
+
   const onAnchorClick = (event) => {
     const target = event.currentTarget;
     const hash = target.getAttribute('href');
@@ -51,6 +64,7 @@
       document.body.classList.remove('nav-open');
       const toggleButton = parentNav.querySelector('.nav-toggle');
       toggleButton?.setAttribute('aria-expanded', 'false');
+      syncHeaderScrollState();
     }
   };
 
@@ -69,6 +83,7 @@
       root.classList.remove('nav-open');
       document.body.classList.remove('nav-open');
       navToggle.setAttribute('aria-expanded', 'false');
+      syncHeaderScrollState();
     };
 
     navToggle.addEventListener('click', () => {
@@ -78,6 +93,7 @@
       root.classList.toggle('nav-open', nextState);
       document.body.classList.toggle('nav-open', nextState);
       navToggle.setAttribute('aria-expanded', nextState ? 'true' : 'false');
+      syncHeaderScrollState();
     });
 
     navLinks.addEventListener('click', (event) => {
@@ -779,7 +795,7 @@
 
         contactForm.reset();
         Object.keys(fields).forEach((fieldName) => setFieldState(fieldName, true));
-        setStatus('Thanks and your message was sent successfully.', 'success');
+        setStatus("Thanks. Your message was sent successfully. We'll be in touch!", 'success');
       } catch (error) {
         setStatus(error instanceof Error ? error.message : 'Network error. Please try again.', 'error');
       }
