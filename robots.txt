@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://defineai.example/sitemap.xml
